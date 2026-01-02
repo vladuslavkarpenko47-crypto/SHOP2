@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>COSMO SHOP</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #fff7cc;
+    }
+
+    header {
+      padding: 16px;
+      font-size: 22px;
+      font-weight: bold;
+      text-align: center;
+      position: relative;
+    }
+
+    .cart {
+      position: absolute;
+      right: 16px;
+      top: 16px;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      padding: 12px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 12px;
+    }
+
+    button {
+      background: #ffd400;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 12px;
+      margin-top: 6px;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(10px);
+      padding: 10px 0;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  COSMO SHOP
+  <div class="cart">🛒 0 | 0₴</div>
+</header>
+
+<div class="products">
+  <div class="card">
+    <img src="https://via.placeholder.com/300">
+    <h3>Товар 1</h3>
+    <p>Короткое описание</p>
+    <button>Добавить</button>
+  </div>
+
+  <div class="card">
+    <img src="https://via.placeholder.com/300">
+    <h3>Товар 2</h3>
+    <p>Короткое описание</p>
+    <button>Добавить</button>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  🏠 🛍️ ❤️ 👤
+</div>
+
+</body>
+</html>
