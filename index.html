@@ -9,11 +9,11 @@
 
 <style>
 :root{
-  --bg:#FFF7D6;
-  --card:#FFF1B8;
-  --yellow:#FFD400;
-  --text:#1c1c1c;
-  --muted:#666;
+  --bg:#F7F7FA;
+  --card:#ffffff;
+  --accent:#FF5A5F;
+  --text:#111;
+  --muted:#777;
 }
 
 *{box-sizing:border-box}
@@ -27,37 +27,82 @@ body{
 
 /* HEADER */
 .header{
-  position:sticky;
-  top:0;
-  background:var(--bg);
   padding:14px;
   font-weight:700;
-  text-align:center;
-  z-index:10;
+  font-size:18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
-.cart-indicator{
+/* BANNERS */
+.slider{
+  display:flex;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  gap:12px;
+  padding:0 14px;
+}
+.slider::-webkit-scrollbar{display:none}
+
+.banner{
+  min-width:85%;
+  height:160px;
+  border-radius:20px;
+  background-size:cover;
+  background-position:center;
+  scroll-snap-align:start;
+  position:relative;
+}
+
+.banner::after{
+  content:"";
   position:absolute;
-  right:14px;
-  top:14px;
-  font-size:14px;
+  inset:0;
+  border-radius:20px;
+  background:linear-gradient(180deg,transparent,rgba(0,0,0,.4));
 }
 
-/* GRID */
+.banner span{
+  position:absolute;
+  bottom:14px;
+  left:14px;
+  color:#fff;
+  font-size:18px;
+  font-weight:600;
+  z-index:1;
+}
+
+/* CATEGORIES */
+.categories{
+  display:flex;
+  gap:10px;
+  padding:14px;
+  overflow-x:auto;
+}
+.categories::-webkit-scrollbar{display:none}
+
+.cat{
+  padding:8px 14px;
+  background:#fff;
+  border-radius:999px;
+  font-size:13px;
+  white-space:nowrap;
+}
+
+/* PRODUCTS */
 .products{
   display:grid;
   grid-template-columns:repeat(2,1fr);
-  gap:12px;
-  padding:12px;
+  gap:14px;
+  padding:14px;
   padding-bottom:100px;
 }
 
-/* CARD */
 .card{
   background:var(--card);
   border-radius:20px;
   padding:10px;
-  animation:fadeIn .3s ease;
 }
 
 .card img{
@@ -80,42 +125,7 @@ body{
 
 .price{
   font-weight:700;
-  margin:6px 0;
-}
-
-.buy{
-  width:100%;
-  padding:10px;
-  border:none;
-  border-radius:999px;
-  background:var(--yellow);
-  font-weight:600;
-}
-
-/* DETAILS + CART */
-.screen{
-  display:none;
-  padding:16px;
-  animation:slideUp .3s ease;
-}
-
-.screen img{
-  width:100%;
-  border-radius:24px;
-}
-
-.back{
-  border:none;
-  background:none;
-  font-size:16px;
-  margin-bottom:10px;
-}
-
-/* CART LIST */
-.cart-item{
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:10px;
+  margin-top:6px;
 }
 
 /* BOTTOM BAR */
@@ -131,25 +141,9 @@ body{
   border-top:1px solid #eee;
 }
 
-.bottom button{
-  background:none;
-  border:none;
-}
-
 .bottom svg{
   width:22px;
   height:22px;
-}
-
-/* ANIMATIONS */
-@keyframes fadeIn{
-  from{opacity:0}
-  to{opacity:1}
-}
-
-@keyframes slideUp{
-  from{transform:translateY(20px);opacity:0}
-  to{transform:none;opacity:1}
 }
 </style>
 </head>
@@ -157,107 +151,73 @@ body{
 <body>
 
 <div class="header">
-  COSMO SHOP
-  <div class="cart-indicator">🛒 <span id="cartCount">0</span> | $<span id="cartSum">0</span></div>
+  Discover
+  <span>🔍</span>
 </div>
 
-<!-- MAIN -->
-<div id="main" class="products"></div>
-
-<!-- DETAILS -->
-<div id="details" class="screen">
-  <button class="back" onclick="showMain()">← Back</button>
-  <img id="dImg">
-  <h2 id="dTitle"></h2>
-  <p id="dDesc"></p>
-  <div class="price" id="dPrice"></div>
-  <button class="buy" onclick="addToCart()">Add to cart</button>
+<!-- SLIDER -->
+<div class="slider">
+  <div class="banner" style="background-image:url('https://images.unsplash.com/photo-1512436991641-6745cdb1723f')">
+    <span>New Collection</span>
+  </div>
+  <div class="banner" style="background-image:url('https://images.unsplash.com/photo-1523275335684-37898b6baf30')">
+    <span>Smart Devices</span>
+  </div>
+  <div class="banner" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee')">
+    <span>Digital Goods</span>
+  </div>
 </div>
 
-<!-- CART -->
-<div id="cart" class="screen">
-  <button class="back" onclick="showMain()">← Back</button>
-  <h2>Cart</h2>
-  <div id="cartList"></div>
+<!-- CATEGORIES -->
+<div class="categories">
+  <div class="cat">Headphones</div>
+  <div class="cat">Presets</div>
+  <div class="cat">UI Kits</div>
+  <div class="cat">Icons</div>
+  <div class="cat">Wallpapers</div>
+</div>
+
+<!-- PRODUCTS -->
+<div class="products">
+  <div class="card">
+    <img src="https://images.unsplash.com/photo-1518441902117-fc8b6c1d8c3c">
+    <h3>Studio Headset</h3>
+    <p>Wireless audio</p>
+    <div class="price">$130</div>
+  </div>
+
+  <div class="card">
+    <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee">
+    <h3>Neon Presets</h3>
+    <p>Lightroom pack</p>
+    <div class="price">$29</div>
+  </div>
+
+  <div class="card">
+    <img src="https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b">
+    <h3>Watch UI</h3>
+    <p>Minimal faces</p>
+    <div class="price">$49</div>
+  </div>
+
+  <div class="card">
+    <img src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6">
+    <h3>Icon Pack</h3>
+    <p>120 SVG icons</p>
+    <div class="price">$19</div>
+  </div>
 </div>
 
 <!-- BOTTOM BAR -->
 <div class="bottom">
-  <button onclick="showMain()">
-    <svg viewBox="0 0 24 24"><path d="M3 10l9-7 9 7v10H3z"/></svg>
-  </button>
-  <button onclick="showCart()">
-    <svg viewBox="0 0 24 24"><path d="M6 6h15l-2 9H7z"/></svg>
-  </button>
-  <button>
-    <svg viewBox="0 0 24 24"><path d="M12 21l-8-7c-2-2-2-5 0-7s5-2 7 0 5-2 7 0 2 5 0 7z"/></svg>
-  </button>
-  <button>
-    <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 100-10 5 5 0 000 10zM4 22c0-4 16-4 16 0"/></svg>
-  </button>
+  <svg viewBox="0 0 24 24"><path d="M3 10l9-7 9 7v10H3z"/></svg>
+  <svg viewBox="0 0 24 24"><path d="M6 6h15l-2 9H7z"/></svg>
+  <svg viewBox="0 0 24 24"><path d="M12 21l-8-7c-2-2-2-5 0-7s5-2 7 0 5-2 7 0 2 5 0 7z"/></svg>
+  <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 100-10 5 5 0 000 10z"/></svg>
 </div>
 
 <script>
 Telegram.WebApp.expand();
-
-const products=[
- {t:"Cosmo Hoodie",p:69,d:"Digital streetwear concept",i:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab"},
- {t:"Neon Preset Pack",p:29,d:"Lightroom presets",i:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee"},
- {t:"Galaxy Watch UI",p:49,d:"Watch face pack",i:"https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b"},
- {t:"Space Icons",p:19,d:"Minimal icon pack",i:"https://images.unsplash.com/photo-1545239351-1141bd82e8a6"}
-];
-
-let cart=[];
-let current=null;
-
-const main=document.getElementById("main");
-
-products.forEach((x,i)=>{
-  const c=document.createElement("div");
-  c.className="card";
-  c.innerHTML=`
-    <img src="${x.i}">
-    <h3>${x.t}</h3>
-    <p>${x.d}</p>
-    <div class="price">$${x.p}</div>
-    <button class="buy" onclick="openDetails(${i})">Buy</button>
-  `;
-  main.appendChild(c);
-});
-
-function openDetails(i){
-  current=products[i];
-  showScreen("details");
-  dImg.src=current.i;
-  dTitle.innerText=current.t;
-  dDesc.innerText=current.d;
-  dPrice.innerText="$"+current.p;
-}
-
-function addToCart(){
-  cart.push(current);
-  updateCart();
-}
-
-function updateCart(){
-  cartCount.innerText=cart.length;
-  cartSum.innerText=cart.reduce((s,x)=>s+x.p,0);
-}
-
-function showMain(){ showScreen("main"); }
-function showCart(){
-  showScreen("cart");
-  cartList.innerHTML="";
-  cart.forEach(x=>{
-    cartList.innerHTML+=`<div class="cart-item">${x.t} — $${x.p}</div>`;
-  });
-}
-
-function showScreen(id){
-  ["main","details","cart"].forEach(x=>{
-    document.getElementById(x).style.display = x===id ? (x==="main"?"grid":"block") : "none";
-  });
-}
 </script>
 
 </body>
