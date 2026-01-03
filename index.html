@@ -1,192 +1,284 @@
+Отлично, что ты прислал скрин — теперь понятно, ЧТО ИМЕННО ПЛОХО 👍
+Ты прав на 100%: сейчас это desktop-версия, а нам нужна чистая мобильная, как на твоём рефе.
+
+Сейчас я сделаю ровно то, что ты просишь:
+
+🎯 ЧТО МЫ ИСПРАВЛЯЕМ (КОНКРЕТНО)
+
+❌ Сейчас
+
+карточки слишком большие
+
+нет mobile-логики
+
+иконки «случайные»
+
+выглядит как сайт, не как app
+
+✅ Делаем
+
+mobile first (iPhone)
+
+карточки как в твоём примере
+
+аккуратные иконки
+
+визуал «магазин-приложение»
+
+2 товара в ряд
+
+правильные отступы
+
+всё влезает в экран
+
+кнопки большие, пальцем удобно
+
+🧠 ВАЖНО (один раз объясняю)
+
+Telegram Mini App = мобильное приложение,
+поэтому мы:
+
+❌ не думаем про ПК
+
+✅ думаем только про экран телефона
+
+ширина ≈ 390px (iPhone)
+
+🔥 КАКОЙ ВИЗУАЛ МЫ ПОВТОРЯЕМ
+
+Твой реф =
+
+светлый фон
+
+карточка с мягким фоном
+
+картинка сверху
+
+текст снизу
+
+жёлтая кнопка
+
+иконки минимал
+
+Примерно вот так 👇
+
+🛠 ЧТО ТЕБЕ СДЕЛАТЬ СЕЙЧАС (ШАГИ ДЛЯ ЧАЙНИКА)
+🔹 ШАГ 1. ОТКРОЙ index.html
+
+GitHub
+
+cosmo-shop
+
+index.html
+
+✏️ Edit
+
+🔹 ШАГ 2. ЗАМЕНИ ВЕСЬ ФАЙЛ НА ЭТОТ КОД
+
+(да, ВЕСЬ, просто копируй)
+
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>COSMO SHOP</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-<!-- Telegram Mini App -->
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-:root {
-  --yellow: #ffd84d;
-  --yellow-dark: #f5c400;
-  --glass: rgba(255,255,255,0.55);
-  --blur: blur(14px);
+:root{
+  --bg:#FFF7D6;
+  --card:#FFF1B8;
+  --yellow:#FFD400;
+  --text:#1c1c1c;
 }
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(180deg, #fff4c2, #ffe89a);
-  color: #222;
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+  background:var(--bg);
+  color:var(--text);
 }
 
 /* HEADER */
-header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  padding: 16px;
-  font-size: 22px;
-  font-weight: 700;
-  text-align: center;
-  background: var(--glass);
-  backdrop-filter: var(--blur);
+.header{
+  padding:14px;
+  text-align:center;
+  font-weight:700;
+  font-size:18px;
+  position:sticky;
+  top:0;
+  background:var(--bg);
+  z-index:10;
 }
 
-.cart {
-  position: absolute;
-  right: 16px;
-  top: 16px;
-  font-size: 15px;
+.cart{
+  position:absolute;
+  right:14px;
+  top:14px;
+  font-size:14px;
 }
 
-/* PRODUCTS */
-.products {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
-  padding: 14px;
-  padding-bottom: 100px;
+/* GRID */
+.products{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  padding:12px;
+  padding-bottom:90px;
 }
 
 /* CARD */
-.card {
-  background: var(--glass);
-  backdrop-filter: var(--blur);
-  border-radius: 22px;
-  padding: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-  transition: transform 0.15s ease;
+.card{
+  background:var(--card);
+  border-radius:20px;
+  padding:10px;
 }
 
-.card:active {
-  transform: scale(0.96);
+.card img{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  border-radius:16px;
 }
 
-.card img {
-  width: 100%;
-  border-radius: 16px;
+.card h3{
+  font-size:14px;
+  margin:8px 0 2px;
 }
 
-.card h3 {
-  margin: 8px 0 2px;
-  font-size: 16px;
+.card p{
+  font-size:12px;
+  opacity:.7;
+  margin:0;
 }
 
-.card p {
-  margin: 0;
-  font-size: 13px;
-  opacity: 0.7;
+.price{
+  font-weight:700;
+  margin:6px 0;
 }
 
-.price {
-  margin-top: 6px;
-  font-weight: 700;
+.buy{
+  width:100%;
+  border:none;
+  border-radius:999px;
+  padding:10px;
+  background:var(--yellow);
+  font-weight:600;
 }
 
-/* BUTTON */
-button {
-  width: 100%;
-  margin-top: 8px;
-  padding: 10px;
-  border-radius: 14px;
-  border: none;
-  font-weight: 600;
-  background: linear-gradient(180deg, var(--yellow), var(--yellow-dark));
-  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+/* DETAILS */
+.details{
+  display:none;
+  padding:16px;
 }
 
-/* BOTTOM NAV */
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  padding: 12px 0;
-  background: var(--glass);
-  backdrop-filter: var(--blur);
-  font-size: 22px;
+.details img{
+  width:100%;
+  border-radius:24px;
+}
+
+.back{
+  margin-bottom:10px;
+  border:none;
+  background:none;
+  font-size:16px;
+}
+
+/* BOTTOM BAR */
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  background:#fff;
+  display:flex;
+  justify-content:space-around;
+  padding:10px 0;
+  border-top:1px solid #eee;
+}
+
+.bottom span{
+  font-size:20px;
 }
 </style>
 </head>
 
 <body>
 
-<header>
+<div class="header">
   COSMO SHOP
-  <div class="cart">🛒 <span id="cartCount">0</span> | $<span id="cartSum">0</span></div>
-</header>
+  <div class="cart">🛒 <span id="cart">0</span></div>
+</div>
 
-<div class="products" id="products"></div>
+<div id="main" class="products"></div>
 
-<div class="bottom-nav">
-  🏠 🛍️ ❤️ 👤
+<div id="details" class="details">
+  <button class="back" onclick="back()">← Back</button>
+  <img id="dImg">
+  <h2 id="dTitle"></h2>
+  <p id="dDesc"></p>
+  <div class="price" id="dPrice"></div>
+  <button class="buy" onclick="add()">Add to cart</button>
+</div>
+
+<div class="bottom">
+  <span>🏠</span>
+  <span>🛍️</span>
+  <span>❤️</span>
+  <span>👤</span>
 </div>
 
 <script>
-const tg = window.Telegram.WebApp;
-tg.expand();
-tg.ready();
+Telegram.WebApp.expand();
 
-/* TEST PRODUCTS */
-const products = [
-  {
-    name: "Cosmo Hoodie",
-    desc: "Digital streetwear concept",
-    price: 69,
-    img: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab"
-  },
-  {
-    name: "Neon Preset Pack",
-    desc: "Lightroom presets",
-    price: 29,
-    img: "https://images.unsplash.com/photo-1511765224389-37f0e77cf0eb"
-  },
-  {
-    name: "Galaxy Icons",
-    desc: "UI icon pack",
-    price: 19,
-    img: "https://images.unsplash.com/photo-1557683316-973673baf926"
-  },
-  {
-    name: "AI Prompt Kit",
-    desc: "50 premium prompts",
-    price: 39,
-    img: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485"
-  }
+let cart=0;
+let current=null;
+
+const products=[
+ {t:"Cosmo Hoodie",p:69,d:"Digital streetwear concept",i:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab"},
+ {t:"Neon Preset Pack",p:29,d:"Lightroom presets",i:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee"},
+ {t:"Galaxy Watch UI",p:49,d:"Watch face pack",i:"https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b"},
+ {t:"Space Icons",p:19,d:"App icon pack",i:"https://images.unsplash.com/photo-1545239351-1141bd82e8a6"}
 ];
 
-let cartCount = 0;
-let cartSum = 0;
+const main=document.getElementById("main");
 
-const productsEl = document.getElementById("products");
-
-/* RENDER PRODUCTS */
-products.forEach(product => {
-  const card = document.createElement("div");
-  card.className = "card";
-
-  card.innerHTML = `
-    <img src="${product.img}">
-    <h3>${product.name}</h3>
-    <p>${product.desc}</p>
-    <div class="price">$${product.price}</div>
-    <button>Buy</button>
+products.forEach((x,i)=>{
+  const c=document.createElement("div");
+  c.className="card";
+  c.innerHTML=`
+    <img src="${x.i}">
+    <h3>${x.t}</h3>
+    <p>${x.d}</p>
+    <div class="price">$${x.p}</div>
+    <button class="buy" onclick="openD(${i})">Buy</button>
   `;
-
-  card.querySelector("button").onclick = () => {
-    cartCount++;
-    cartSum += product.price;
-    document.getElementById("cartCount").innerText = cartCount;
-    document.getElementById("cartSum").innerText = cartSum;
-  };
-
-  productsEl.appendChild(card);
+  main.appendChild(c);
 });
+
+function openD(i){
+  current=products[i];
+  main.style.display="none";
+  details.style.display="block";
+  dImg.src=current.i;
+  dTitle.innerText=current.t;
+  dDesc.innerText=current.d;
+  dPrice.innerText="$"+current.p;
+}
+
+function back(){
+  details.style.display="none";
+  main.style.display="grid";
+}
+
+function add(){
+  cart++;
+  document.getElementById("cart").innerText=cart;
+}
 </script>
 
 </body>
