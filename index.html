@@ -1,98 +1,193 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>COSMO SHOP</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>COSMO SHOP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #fff7cc;
-    }
+<!-- Telegram Mini App -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-    header {
-      padding: 16px;
-      font-size: 22px;
-      font-weight: bold;
-      text-align: center;
-      position: relative;
-    }
+<style>
+:root {
+  --yellow: #ffd84d;
+  --yellow-dark: #f5c400;
+  --glass: rgba(255,255,255,0.55);
+  --blur: blur(14px);
+}
 
-    .cart {
-      position: absolute;
-      right: 16px;
-      top: 16px;
-    }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(180deg, #fff4c2, #ffe89a);
+  color: #222;
+}
 
-    .products {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      padding: 12px;
-    }
+/* HEADER */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 16px;
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  background: var(--glass);
+  backdrop-filter: var(--blur);
+}
 
-    .card {
-      background: rgba(255,255,255,0.6);
-      backdrop-filter: blur(10px);
-      border-radius: 16px;
-      padding: 10px;
-      text-align: center;
-    }
+.cart {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  font-size: 15px;
+}
 
-    .card img {
-      width: 100%;
-      border-radius: 12px;
-    }
+/* PRODUCTS */
+.products {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  padding: 14px;
+  padding-bottom: 100px;
+}
 
-    button {
-      background: #ffd400;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 12px;
-      margin-top: 6px;
-    }
+/* CARD */
+.card {
+  background: var(--glass);
+  backdrop-filter: var(--blur);
+  border-radius: 22px;
+  padding: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  transition: transform 0.15s ease;
+}
 
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      display: flex;
-      justify-content: space-around;
-      background: rgba(255,255,255,0.7);
-      backdrop-filter: blur(10px);
-      padding: 10px 0;
-    }
-  </style>
+.card:active {
+  transform: scale(0.96);
+}
+
+.card img {
+  width: 100%;
+  border-radius: 16px;
+}
+
+.card h3 {
+  margin: 8px 0 2px;
+  font-size: 16px;
+}
+
+.card p {
+  margin: 0;
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.price {
+  margin-top: 6px;
+  font-weight: 700;
+}
+
+/* BUTTON */
+button {
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px;
+  border-radius: 14px;
+  border: none;
+  font-weight: 600;
+  background: linear-gradient(180deg, var(--yellow), var(--yellow-dark));
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+}
+
+/* BOTTOM NAV */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 0;
+  background: var(--glass);
+  backdrop-filter: var(--blur);
+  font-size: 22px;
+}
+</style>
 </head>
 
 <body>
 
 <header>
   COSMO SHOP
-  <div class="cart">🛒 0 | 0₴</div>
+  <div class="cart">🛒 <span id="cartCount">0</span> | $<span id="cartSum">0</span></div>
 </header>
 
-<div class="products">
-  <div class="card">
-    <img src="https://via.placeholder.com/300">
-    <h3>Товар 1</h3>
-    <p>Короткое описание</p>
-    <button>Добавить</button>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/300">
-    <h3>Товар 2</h3>
-    <p>Короткое описание</p>
-    <button>Добавить</button>
-  </div>
-</div>
+<div class="products" id="products"></div>
 
 <div class="bottom-nav">
   🏠 🛍️ ❤️ 👤
 </div>
+
+<script>
+const tg = window.Telegram.WebApp;
+tg.expand();
+tg.ready();
+
+/* TEST PRODUCTS */
+const products = [
+  {
+    name: "Cosmo Hoodie",
+    desc: "Digital streetwear concept",
+    price: 69,
+    img: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab"
+  },
+  {
+    name: "Neon Preset Pack",
+    desc: "Lightroom presets",
+    price: 29,
+    img: "https://images.unsplash.com/photo-1511765224389-37f0e77cf0eb"
+  },
+  {
+    name: "Galaxy Icons",
+    desc: "UI icon pack",
+    price: 19,
+    img: "https://images.unsplash.com/photo-1557683316-973673baf926"
+  },
+  {
+    name: "AI Prompt Kit",
+    desc: "50 premium prompts",
+    price: 39,
+    img: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485"
+  }
+];
+
+let cartCount = 0;
+let cartSum = 0;
+
+const productsEl = document.getElementById("products");
+
+/* RENDER PRODUCTS */
+products.forEach(product => {
+  const card = document.createElement("div");
+  card.className = "card";
+
+  card.innerHTML = `
+    <img src="${product.img}">
+    <h3>${product.name}</h3>
+    <p>${product.desc}</p>
+    <div class="price">$${product.price}</div>
+    <button>Buy</button>
+  `;
+
+  card.querySelector("button").onclick = () => {
+    cartCount++;
+    cartSum += product.price;
+    document.getElementById("cartCount").innerText = cartCount;
+    document.getElementById("cartSum").innerText = cartSum;
+  };
+
+  productsEl.appendChild(card);
+});
+</script>
 
 </body>
 </html>
