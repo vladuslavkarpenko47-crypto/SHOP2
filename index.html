@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>COSMO SHOP</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
@@ -13,6 +13,7 @@
   --card:#FFF1B8;
   --yellow:#FFD400;
   --text:#1c1c1c;
+  --muted:#666;
 }
 
 *{box-sizing:border-box}
@@ -26,17 +27,16 @@ body{
 
 /* HEADER */
 .header{
-  padding:14px;
-  text-align:center;
-  font-weight:700;
-  font-size:18px;
   position:sticky;
   top:0;
   background:var(--bg);
+  padding:14px;
+  font-weight:700;
+  text-align:center;
   z-index:10;
 }
 
-.cart{
+.cart-indicator{
   position:absolute;
   right:14px;
   top:14px;
@@ -49,7 +49,7 @@ body{
   grid-template-columns:repeat(2,1fr);
   gap:12px;
   padding:12px;
-  padding-bottom:90px;
+  padding-bottom:100px;
 }
 
 /* CARD */
@@ -57,6 +57,7 @@ body{
   background:var(--card);
   border-radius:20px;
   padding:10px;
+  animation:fadeIn .3s ease;
 }
 
 .card img{
@@ -73,7 +74,7 @@ body{
 
 .card p{
   font-size:12px;
-  opacity:.7;
+  color:var(--muted);
   margin:0;
 }
 
@@ -84,29 +85,37 @@ body{
 
 .buy{
   width:100%;
+  padding:10px;
   border:none;
   border-radius:999px;
-  padding:10px;
   background:var(--yellow);
   font-weight:600;
 }
 
-/* DETAILS */
-.details{
+/* DETAILS + CART */
+.screen{
   display:none;
   padding:16px;
+  animation:slideUp .3s ease;
 }
 
-.details img{
+.screen img{
   width:100%;
   border-radius:24px;
 }
 
 .back{
-  margin-bottom:10px;
   border:none;
   background:none;
   font-size:16px;
+  margin-bottom:10px;
+}
+
+/* CART LIST */
+.cart-item{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:10px;
 }
 
 /* BOTTOM BAR */
@@ -122,8 +131,25 @@ body{
   border-top:1px solid #eee;
 }
 
-.bottom span{
-  font-size:20px;
+.bottom button{
+  background:none;
+  border:none;
+}
+
+.bottom svg{
+  width:22px;
+  height:22px;
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+@keyframes slideUp{
+  from{transform:translateY(20px);opacity:0}
+  to{transform:none;opacity:1}
 }
 </style>
 </head>
@@ -132,39 +158,57 @@ body{
 
 <div class="header">
   COSMO SHOP
-  <div class="cart">🛒 <span id="cart">0</span></div>
+  <div class="cart-indicator">🛒 <span id="cartCount">0</span> | $<span id="cartSum">0</span></div>
 </div>
 
+<!-- MAIN -->
 <div id="main" class="products"></div>
 
-<div id="details" class="details">
-  <button class="back" onclick="back()">← Back</button>
+<!-- DETAILS -->
+<div id="details" class="screen">
+  <button class="back" onclick="showMain()">← Back</button>
   <img id="dImg">
   <h2 id="dTitle"></h2>
   <p id="dDesc"></p>
   <div class="price" id="dPrice"></div>
-  <button class="buy" onclick="add()">Add to cart</button>
+  <button class="buy" onclick="addToCart()">Add to cart</button>
 </div>
 
+<!-- CART -->
+<div id="cart" class="screen">
+  <button class="back" onclick="showMain()">← Back</button>
+  <h2>Cart</h2>
+  <div id="cartList"></div>
+</div>
+
+<!-- BOTTOM BAR -->
 <div class="bottom">
-  <span>🏠</span>
-  <span>🛍️</span>
-  <span>❤️</span>
-  <span>👤</span>
+  <button onclick="showMain()">
+    <svg viewBox="0 0 24 24"><path d="M3 10l9-7 9 7v10H3z"/></svg>
+  </button>
+  <button onclick="showCart()">
+    <svg viewBox="0 0 24 24"><path d="M6 6h15l-2 9H7z"/></svg>
+  </button>
+  <button>
+    <svg viewBox="0 0 24 24"><path d="M12 21l-8-7c-2-2-2-5 0-7s5-2 7 0 5-2 7 0 2 5 0 7z"/></svg>
+  </button>
+  <button>
+    <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 100-10 5 5 0 000 10zM4 22c0-4 16-4 16 0"/></svg>
+  </button>
 </div>
 
 <script>
 Telegram.WebApp.expand();
 
-let cart=0;
-let current=null;
-
 const products=[
  {t:"Cosmo Hoodie",p:69,d:"Digital streetwear concept",i:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab"},
  {t:"Neon Preset Pack",p:29,d:"Lightroom presets",i:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee"},
  {t:"Galaxy Watch UI",p:49,d:"Watch face pack",i:"https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b"},
- {t:"Space Icons",p:19,d:"App icon pack",i:"https://images.unsplash.com/photo-1545239351-1141bd82e8a6"}
+ {t:"Space Icons",p:19,d:"Minimal icon pack",i:"https://images.unsplash.com/photo-1545239351-1141bd82e8a6"}
 ];
+
+let cart=[];
+let current=null;
 
 const main=document.getElementById("main");
 
@@ -176,29 +220,43 @@ products.forEach((x,i)=>{
     <h3>${x.t}</h3>
     <p>${x.d}</p>
     <div class="price">$${x.p}</div>
-    <button class="buy" onclick="openD(${i})">Buy</button>
+    <button class="buy" onclick="openDetails(${i})">Buy</button>
   `;
   main.appendChild(c);
 });
 
-function openD(i){
+function openDetails(i){
   current=products[i];
-  main.style.display="none";
-  details.style.display="block";
+  showScreen("details");
   dImg.src=current.i;
   dTitle.innerText=current.t;
   dDesc.innerText=current.d;
   dPrice.innerText="$"+current.p;
 }
 
-function back(){
-  details.style.display="none";
-  main.style.display="grid";
+function addToCart(){
+  cart.push(current);
+  updateCart();
 }
 
-function add(){
-  cart++;
-  document.getElementById("cart").innerText=cart;
+function updateCart(){
+  cartCount.innerText=cart.length;
+  cartSum.innerText=cart.reduce((s,x)=>s+x.p,0);
+}
+
+function showMain(){ showScreen("main"); }
+function showCart(){
+  showScreen("cart");
+  cartList.innerHTML="";
+  cart.forEach(x=>{
+    cartList.innerHTML+=`<div class="cart-item">${x.t} — $${x.p}</div>`;
+  });
+}
+
+function showScreen(id){
+  ["main","details","cart"].forEach(x=>{
+    document.getElementById(x).style.display = x===id ? (x==="main"?"grid":"block") : "none";
+  });
 }
 </script>
 
