@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>COSMO SHOP</title>
+<title>COSMO SHOP – Details</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -27,56 +27,34 @@ body{
 
 /* HEADER */
 .header{
-  padding:14px;
-  font-weight:700;
-  font-size:18px;
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  gap:10px;
+  padding:14px;
+  font-size:16px;
 }
 
-/* SLIDER */
-.slider-wrap{
-  position:relative;
+.back{
+  font-size:18px;
 }
 
-.slider{
+/* GALLERY */
+.gallery{
   display:flex;
   overflow-x:auto;
   scroll-snap-type:x mandatory;
   gap:12px;
   padding:0 14px;
-  scroll-behavior:smooth;
 }
-.slider::-webkit-scrollbar{display:none}
+.gallery::-webkit-scrollbar{display:none}
 
-.banner{
-  min-width:85%;
-  height:160px;
-  border-radius:20px;
+.photo{
+  min-width:100%;
+  height:320px;
+  border-radius:24px;
   background-size:cover;
   background-position:center;
   scroll-snap-align:center;
-  position:relative;
-  transition:transform .3s ease;
-}
-
-.banner::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:20px;
-  background:linear-gradient(180deg,transparent,rgba(0,0,0,.45));
-}
-
-.banner span{
-  position:absolute;
-  bottom:14px;
-  left:14px;
-  color:#fff;
-  font-size:18px;
-  font-weight:600;
-  z-index:1;
 }
 
 /* DOTS */
@@ -84,7 +62,7 @@ body{
   display:flex;
   justify-content:center;
   gap:6px;
-  margin-top:8px;
+  margin:10px 0;
 }
 .dot{
   width:6px;
@@ -92,192 +70,123 @@ body{
   border-radius:50%;
   background:#ddd;
 }
-.dot.active{
-  background:#111;
+.dot.active{background:#111}
+
+/* CONTENT */
+.content{
+  padding:0 16px 120px;
 }
 
-/* CATEGORIES */
-.categories{
-  display:flex;
-  gap:10px;
-  padding:14px;
-  overflow-x:auto;
-}
-.categories::-webkit-scrollbar{display:none}
-
-.cat{
-  padding:8px 14px;
-  background:#fff;
-  border-radius:999px;
-  font-size:13px;
-  white-space:nowrap;
-}
-
-/* PRODUCTS */
-.products{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:14px;
-  padding:14px;
-  padding-bottom:100px;
-}
-
-.card{
-  background:var(--card);
-  border-radius:20px;
-  padding:10px;
-  transition:transform .15s ease, box-shadow .15s ease;
-}
-
-.card:active{
-  transform:scale(.97);
-}
-
-.card img{
-  width:100%;
-  aspect-ratio:1/1;
-  object-fit:cover;
-  border-radius:16px;
-}
-
-.card h3{
-  font-size:14px;
-  margin:8px 0 2px;
-}
-
-.card p{
-  font-size:12px;
-  color:var(--muted);
-  margin:0;
+.title{
+  font-size:22px;
+  font-weight:700;
+  margin:8px 0 4px;
 }
 
 .price{
-  font-weight:700;
-  margin-top:6px;
+  font-size:24px;
+  font-weight:800;
+  color:var(--accent);
+  margin:6px 0 12px;
 }
 
-/* BOTTOM BAR */
-.bottom{
-  position:fixed;
-  bottom:0;
-  left:0;
-  width:100%;
-  background:#fff;
+.desc{
+  font-size:14px;
+  color:var(--muted);
+  line-height:1.4;
+}
+
+/* OPTIONS */
+.options{
   display:flex;
-  justify-content:space-around;
-  padding:10px 0;
-  border-top:1px solid #eee;
+  gap:10px;
+  margin:16px 0;
+}
+.opt{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  border:2px solid transparent;
+}
+.opt.active{
+  border-color:#111;
 }
 
-.bottom svg{
-  width:22px;
-  height:22px;
+/* BUTTON */
+.buy{
+  position:fixed;
+  bottom:20px;
+  left:16px;
+  right:16px;
+  background:linear-gradient(180deg,#FF6A6A,#FF3E3E);
+  color:#fff;
+  border:none;
+  border-radius:18px;
+  padding:16px;
+  font-size:16px;
+  font-weight:700;
+  box-shadow:0 10px 25px rgba(255,90,95,.4);
+  transition:transform .15s ease;
 }
+.buy:active{transform:scale(.97)}
 </style>
 </head>
 
 <body>
 
 <div class="header">
-  Discover
-  <span>🔍</span>
+  <span class="back">←</span>
+  Details
 </div>
 
-<!-- SLIDER -->
-<div class="slider-wrap">
-  <div class="slider" id="slider">
-    <div class="banner" style="background-image:url('https://images.unsplash.com/photo-1512436991641-6745cdb1723f')">
-      <span>New Collection</span>
-    </div>
-    <div class="banner" style="background-image:url('https://images.unsplash.com/photo-1523275335684-37898b6baf30')">
-      <span>Smart Devices</span>
-    </div>
-    <div class="banner" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee')">
-      <span>Digital Goods</span>
-    </div>
-  </div>
-
-  <div class="dots" id="dots"></div>
+<!-- GALLERY -->
+<div class="gallery" id="gallery">
+  <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1505740420928-5e560c06d30e')"></div>
+  <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1518441902117-fc8b6c1d8c3c')"></div>
+  <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b')"></div>
 </div>
 
-<!-- CATEGORIES -->
-<div class="categories">
-  <div class="cat">Headphones</div>
-  <div class="cat">Presets</div>
-  <div class="cat">UI Kits</div>
-  <div class="cat">Icons</div>
-  <div class="cat">Wallpapers</div>
-</div>
+<div class="dots" id="dots"></div>
 
-<!-- PRODUCTS -->
-<div class="products">
-  <div class="card">
-    <img src="https://images.unsplash.com/photo-1518441902117-fc8b6c1d8c3c">
-    <h3>Studio Headset</h3>
-    <p>Wireless audio</p>
-    <div class="price">$130</div>
+<!-- CONTENT -->
+<div class="content">
+  <div class="title">Oraiimo Soundpro Headset</div>
+  <div class="price">$130</div>
+
+  <div class="desc">
+    Premium wireless headset with deep bass, noise isolation and modern
+    minimal design. Perfect for work and travel.
   </div>
 
-  <div class="card">
-    <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee">
-    <h3>Neon Presets</h3>
-    <p>Lightroom pack</p>
-    <div class="price">$29</div>
-  </div>
-
-  <div class="card">
-    <img src="https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b">
-    <h3>Watch UI</h3>
-    <p>Minimal faces</p>
-    <div class="price">$49</div>
-  </div>
-
-  <div class="card">
-    <img src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6">
-    <h3>Icon Pack</h3>
-    <p>120 SVG icons</p>
-    <div class="price">$19</div>
+  <div class="options">
+    <div class="opt active" style="background:#111"></div>
+    <div class="opt" style="background:#999"></div>
+    <div class="opt" style="background:#FF5A5F"></div>
   </div>
 </div>
 
-<!-- BOTTOM -->
-<div class="bottom">
-  <svg viewBox="0 0 24 24"><path d="M3 10l9-7 9 7v10H3z"/></svg>
-  <svg viewBox="0 0 24 24"><path d="M6 6h15l-2 9H7z"/></svg>
-  <svg viewBox="0 0 24 24"><path d="M12 21l-8-7c-2-2-2-5 0-7s5-2 7 0 5-2 7 0 2 5 0 7z"/></svg>
-  <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 100-10 5 5 0 000 10z"/></svg>
-</div>
+<button class="buy">Add to Cart</button>
 
 <script>
 Telegram.WebApp.expand();
 
-const slider = document.getElementById("slider");
-const dotsWrap = document.getElementById("dots");
-const banners = document.querySelectorAll(".banner");
+/* dots */
+const gallery=document.getElementById("gallery");
+const photos=document.querySelectorAll(".photo");
+const dotsWrap=document.getElementById("dots");
 
-banners.forEach((_,i)=>{
+photos.forEach((_,i)=>{
   const d=document.createElement("div");
   d.className="dot"+(i===0?" active":"");
   dotsWrap.appendChild(d);
 });
-
 const dots=document.querySelectorAll(".dot");
 
-slider.addEventListener("scroll",()=>{
-  const index=Math.round(slider.scrollLeft / slider.offsetWidth);
+gallery.addEventListener("scroll",()=>{
+  const i=Math.round(gallery.scrollLeft / gallery.offsetWidth);
   dots.forEach(d=>d.classList.remove("active"));
-  dots[index]?.classList.add("active");
+  dots[i]?.classList.add("active");
 });
-
-// auto slide
-let current=0;
-setInterval(()=>{
-  current=(current+1)%banners.length;
-  slider.scrollTo({
-    left:slider.offsetWidth*current,
-    behavior:"smooth"
-  });
-},4000);
 </script>
 
 </body>
