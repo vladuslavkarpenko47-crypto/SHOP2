@@ -35,13 +35,18 @@ body{
   align-items:center;
 }
 
-/* BANNERS */
+/* SLIDER */
+.slider-wrap{
+  position:relative;
+}
+
 .slider{
   display:flex;
   overflow-x:auto;
   scroll-snap-type:x mandatory;
   gap:12px;
   padding:0 14px;
+  scroll-behavior:smooth;
 }
 .slider::-webkit-scrollbar{display:none}
 
@@ -51,8 +56,9 @@ body{
   border-radius:20px;
   background-size:cover;
   background-position:center;
-  scroll-snap-align:start;
+  scroll-snap-align:center;
   position:relative;
+  transition:transform .3s ease;
 }
 
 .banner::after{
@@ -60,7 +66,7 @@ body{
   position:absolute;
   inset:0;
   border-radius:20px;
-  background:linear-gradient(180deg,transparent,rgba(0,0,0,.4));
+  background:linear-gradient(180deg,transparent,rgba(0,0,0,.45));
 }
 
 .banner span{
@@ -71,6 +77,23 @@ body{
   font-size:18px;
   font-weight:600;
   z-index:1;
+}
+
+/* DOTS */
+.dots{
+  display:flex;
+  justify-content:center;
+  gap:6px;
+  margin-top:8px;
+}
+.dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#ddd;
+}
+.dot.active{
+  background:#111;
 }
 
 /* CATEGORIES */
@@ -103,6 +126,11 @@ body{
   background:var(--card);
   border-radius:20px;
   padding:10px;
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+
+.card:active{
+  transform:scale(.97);
 }
 
 .card img{
@@ -156,16 +184,20 @@ body{
 </div>
 
 <!-- SLIDER -->
-<div class="slider">
-  <div class="banner" style="background-image:url('https://images.unsplash.com/photo-1512436991641-6745cdb1723f')">
-    <span>New Collection</span>
+<div class="slider-wrap">
+  <div class="slider" id="slider">
+    <div class="banner" style="background-image:url('https://images.unsplash.com/photo-1512436991641-6745cdb1723f')">
+      <span>New Collection</span>
+    </div>
+    <div class="banner" style="background-image:url('https://images.unsplash.com/photo-1523275335684-37898b6baf30')">
+      <span>Smart Devices</span>
+    </div>
+    <div class="banner" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee')">
+      <span>Digital Goods</span>
+    </div>
   </div>
-  <div class="banner" style="background-image:url('https://images.unsplash.com/photo-1523275335684-37898b6baf30')">
-    <span>Smart Devices</span>
-  </div>
-  <div class="banner" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee')">
-    <span>Digital Goods</span>
-  </div>
+
+  <div class="dots" id="dots"></div>
 </div>
 
 <!-- CATEGORIES -->
@@ -208,7 +240,7 @@ body{
   </div>
 </div>
 
-<!-- BOTTOM BAR -->
+<!-- BOTTOM -->
 <div class="bottom">
   <svg viewBox="0 0 24 24"><path d="M3 10l9-7 9 7v10H3z"/></svg>
   <svg viewBox="0 0 24 24"><path d="M6 6h15l-2 9H7z"/></svg>
@@ -218,6 +250,34 @@ body{
 
 <script>
 Telegram.WebApp.expand();
+
+const slider = document.getElementById("slider");
+const dotsWrap = document.getElementById("dots");
+const banners = document.querySelectorAll(".banner");
+
+banners.forEach((_,i)=>{
+  const d=document.createElement("div");
+  d.className="dot"+(i===0?" active":"");
+  dotsWrap.appendChild(d);
+});
+
+const dots=document.querySelectorAll(".dot");
+
+slider.addEventListener("scroll",()=>{
+  const index=Math.round(slider.scrollLeft / slider.offsetWidth);
+  dots.forEach(d=>d.classList.remove("active"));
+  dots[index]?.classList.add("active");
+});
+
+// auto slide
+let current=0;
+setInterval(()=>{
+  current=(current+1)%banners.length;
+  slider.scrollTo({
+    left:slider.offsetWidth*current,
+    behavior:"smooth"
+  });
+},4000);
 </script>
 
 </body>
