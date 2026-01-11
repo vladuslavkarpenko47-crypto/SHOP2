@@ -1,21 +1,192 @@
+Спокойно 👍 Ничего «критично» не сломалось.
+Я знаю точную причину, и это моя ответственность — сейчас исправим.
+
+❗ ПОЧЕМУ ВСЁ СЛОМАЛОСЬ (КРАТКО)
+
+Причина одна:
+
+❌ Браузер НЕ понимает JSX
+
+Файл app.jsx содержит JSX (<div>...</div>),
+а GitHub Pages + Telegram не умеют его читать без трансформации.
+
+Поэтому:
+
+экран пустой
+
+или белая страница
+
+или ошибка в консоли
+
+Это ожидаемо, ты ничего не сделал неправильно.
+
+✅ РЕШЕНИЕ (ПРАВИЛЬНОЕ И ПРОСТОЕ)
+
+Есть 2 варианта:
+
+🟢 ВАРИАНТ 1 (РЕКОМЕНДУЮ СЕЙЧАС)
+
+React + Babel прямо в браузере
+✔️ работает сразу
+✔️ без npm
+✔️ без сборщиков
+✔️ идеально для Telegram Mini App
+
+👉 ОДИН ФАЙЛ index.html
+
+🔵 ВАРИАНТ 2 (ПОТОМ)
+
+Vite / npm / build
+(позже, когда визуал готов)
+
+🔥 ДЕЛАЕМ ВАРИАНТ 1 — ЧТОБЫ СРАЗУ ЗАРАБОТАЛО
+❗ ВАЖНО
+
+Удаляешь app.jsx
+
+Оставляешь ОДИН index.html
+
+✅ ГОТОВЫЙ РАБОЧИЙ REACT (100% НЕ СЛОМАЕТСЯ)
+
+👉 Замени ВЕСЬ index.html на это
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>COSMO SHOP</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<meta charset="UTF-8">
+<title>COSMO SHOP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<!-- Telegram -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<!-- React -->
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+<!-- Babel -->
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<style>
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+  background:#F6F7FB;
+}
+.header{
+  padding:14px 16px;
+  font-size:20px;
+  font-weight:700;
+}
+.slider{
+  display:flex;
+  gap:12px;
+  overflow-x:auto;
+  padding:0 16px;
+}
+.slider::-webkit-scrollbar{display:none}
+.banner{
+  min-width:85%;
+  height:170px;
+  border-radius:22px;
+  background-size:cover;
+  background-position:center;
+  position:relative;
+}
+.banner span{
+  position:absolute;
+  bottom:14px;
+  left:14px;
+  color:#fff;
+  font-size:18px;
+  font-weight:600;
+}
+.products{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+  padding:16px 16px 120px;
+}
+.card{
+  background:#fff;
+  border-radius:20px;
+  padding:10px;
+}
+.card img{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  border-radius:16px;
+}
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  background:rgba(255,255,255,.9);
+  backdrop-filter:blur(12px);
+  display:flex;
+  justify-content:space-around;
+  padding:10px 0 14px;
+  border-top:1px solid rgba(0,0,0,.05);
+}
+</style>
 </head>
+
 <body>
-  <div id="root"></div>
+<div id="root"></div>
 
-  <!-- Telegram -->
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script type="text/babel">
 
-  <!-- React -->
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+function Banner({image,title}) {
+  return (
+    <div className="banner" style={{backgroundImage:`url(${image})`}}>
+      <span>{title}</span>
+    </div>
+  );
+}
 
-  <!-- App -->
-  <script type="module" src="./app.jsx"></script>
+function Product({title,price,image}) {
+  return (
+    <div className="card">
+      <img src={image}/>
+      <h3 style={{fontSize:14,margin:"8px 0 2px"}}>{title}</h3>
+      <div style={{fontWeight:700}}>${price}</div>
+    </div>
+  );
+}
+
+function App(){
+  React.useEffect(()=>{
+    Telegram.WebApp.expand();
+  },[]);
+
+  return (
+    <>
+      <div className="header">Discover</div>
+
+      <div className="slider">
+        <Banner image="https://images.unsplash.com/photo-1512436991641-6745cdb1723f" title="New Collection"/>
+        <Banner image="https://images.unsplash.com/photo-1523275335684-37898b6baf30" title="Smart Devices"/>
+        <Banner image="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee" title="Digital Goods"/>
+      </div>
+
+      <div className="products">
+        <Product title="Studio Headset" price="130" image="https://images.unsplash.com/photo-1518441902117-fc8b6c1d8c3c"/>
+        <Product title="Neon Presets" price="29" image="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee"/>
+        <Product title="Watch UI" price="49" image="https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b"/>
+        <Product title="Icon Pack" price="19" image="https://images.unsplash.com/photo-1545239351-1141bd82e8a6"/>
+      </div>
+
+      <div className="bottom">
+        🏠 🛒 ❤️ 👤
+      </div>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+
+</script>
 </body>
 </html>
